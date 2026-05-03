@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	defaultServiceURL = "http://127.0.0.1:9099/evaluate"
+	defaultServiceURL = "http://host.docker.internal:9099/evaluate"
 	defaultTimeout    = 100 * time.Millisecond
 )
 
