@@ -81,14 +81,18 @@ func (a *mlEvaluateAction) Init(_ plugintypes.RuleMetadata, data string) error {
 
 func (a *mlEvaluateAction) Evaluate(_ plugintypes.RuleMetadata, tx plugintypes.TransactionState) {
 	txVars := tx.Variables().TX()
+	txVars.Set("ml_action_status", []string{"started"})
+	txVars.Set("ml_service_url", []string{a.serviceURL})
 
 	score, err := a.evaluate(tx)
 	if err != nil {
+		txVars.Set("ml_action_status", []string{"error"})
 		txVars.Set("ml_score", []string{"0"})
 		txVars.Set("ml_error", []string{err.Error()})
 		return
 	}
 
+	txVars.Set("ml_action_status", []string{"ok"})
 	txVars.Set("ml_score", []string{strconv.FormatFloat(score, 'f', 6, 64)})
 	txVars.Set("ml_error", []string{"0"})
 }
